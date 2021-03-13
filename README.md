@@ -22,11 +22,11 @@ Try filling in the cells following those steps:<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e) Choices or Answers (column F or later): In a multiple choice quize, put choices as many as you want. The first choice is used for the right answer. Choices will be shuffled. The last choice is used for feedback, both for the correct answer and wrong answers. In a Text quiz, put right answers. Remember those answers are not set in the form due to the current Google App Script issue. Instead, you can use 'Increase Text Answers' button to increase answers, i.e. putting currently lower and upper capital letters and final periods. The last answer is used for feedback.<BR>
 &nbsp;&nbsp;4. Push the 'Create a Form' button. You can get a quiz form on 'My Drive' (root) folder on your Google Drive. If you push the 'Increase Text Answers' button, it increases answers in the Text type quiz row, i.e. putting currently lower and upper capital letters and final periods.<BR>
 <BR>
-The example of the created form is as follows:<BR>
-<img src="readme_img2-1.png"><BR>This is the top part of the form. You can see the title of the quiz and students personal ID questionnaires.<BR>
-<img src="readme_img2-2.png"><BR>This is a Text type quiz and a Multiple Choice quiz. Choices are shuffled.<BR>
-<img src="readme_img2-3.png"><BR>If you set image URL, the image will be shown above the quiz.<BR>
-<img src="readme_img2-4.png"><BR>If you set image ID, the image will be shown above the quiz as well.<BR>
+The example of the created form is as follows:<BR><BR>
+This is the top part of the form. You can see the title of the quiz and students personal ID questionnaires.<BR><img src="readme_img2-1.png"><BR><BR>
+This is a Text type quiz and a Multiple Choice quiz. Choices are shuffled.<BR><img src="readme_img2-2.png"><BR><BR>
+If you set image URL, the image will be shown above the quiz.<BR><img src="readme_img2-3.png"><BR><BR>
+If you set image ID, the image will be shown above the quiz as well.<BR><img src="readme_img2-4.png"><BR><BR>
   
 
 
