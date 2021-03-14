@@ -61,7 +61,7 @@ function create_quizzes_main(action_flag) {
     // get first item and last item of test/questionnaire 
     var firstitem = line[c_item];
     var lastitem = line[c_item + numbers_of_last_items + quiz_flag];
-    console.log('lastitem: '+lastitem);
+    //console.log('lastitem: '+lastitem);
     
     //create quiz
     if (action_flag === 1) {
@@ -125,11 +125,11 @@ function create_quizzes_main(action_flag) {
               itemlist[j] = itemlist[j].slice(0, itemlist[j].length-1);
             }
             itemlist[j] = itemlist[j].charAt(0).toLowerCase() + itemlist[j].slice(1);
-            console.log(itemlist[j]);
+            //console.log(itemlist[j]);
           }
           //unique
           itemlist = Array.from(new Set(itemlist))
-          console.log('itemlist: '+itemlist);
+          //console.log('itemlist: '+itemlist);
   
           //set increased array
           //without dot
@@ -143,7 +143,7 @@ function create_quizzes_main(action_flag) {
           for (j=0; j<arr.length; j++) {
             if (arr[j] === firstitem) {
               arr.splice(j, 1); 
-              console.log(j);
+              //console.log(j);
             }
           }
 
@@ -151,21 +151,21 @@ function create_quizzes_main(action_flag) {
           arr.unshift(firstitem);
           arr.push(lastitem);
           var arr = [arr];
-          console.log('arr: '+arr);
+          //console.log('arr: '+arr);
 
           //set array on the spreadsheet
-          console.log(i);
+          //console.log(i);
           sheet.getRange(r_data + i + 1, c_item + 1, 1, arr[0].length).setValues(arr);
         }
 
     }
     
-    console.log(type);
-    console.log('numbers_of_last_items: '+numbers_of_last_items);
+    //console.log(type);
+    //console.log('numbers_of_last_items: '+numbers_of_last_items);
   }
 
-  console.log(numbers_of_quizzes);
-  console.log(ss)
+  //console.log(numbers_of_quizzes);
+  //console.log(ss)
 }
 
 function isTest_ (value) {
