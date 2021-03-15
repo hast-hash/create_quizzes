@@ -1,7 +1,8 @@
 function create_quizzes_main(action_flag) {
   //action flag: 1 = create_quiz; 2 = increase_right_answers
   //get active spreadsheet data
-  const sheet = SpreadsheetApp.getActiveSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getActiveSheet();
   const ss = sheet.getDataRange().getValues();
 
   //set form title and questions about test-taker's IDs
@@ -35,6 +36,13 @@ function create_quizzes_main(action_flag) {
     form.addTextItem().setTitle(test_taker_name_title).setHelpText(test_taker_name_description).setRequired(true);
   }
 
+  //moveFile to users' folder where the spreadsheet is in
+  const sheet_id = spreadsheet.getId();
+  const sheet_folder = DriveApp.getFileById(sheet_id).getParents().next();
+  const sheet_folder_id = sheet_folder.getId();
+  const form_file = DriveApp.getFileById(form.getId());
+  form_file.moveTo(sheet_folder);
+
   //how many times you create quizzes
   var numbers_of_quizzes = 1;
     for (let j = sheet.getLastRow() - r_data; j > 0; j--) {
@@ -67,7 +75,7 @@ function create_quizzes_main(action_flag) {
     if (action_flag === 1) {
       if (type == '‹Lq') {
         //if any image, set image item
-        setimage_(form, line, c_image);
+        setimage_(form, line, c_image, sheet_folder_id);
 
         //create a text quiz (only form items, currently you cannot set answer keys)
         item = form.addTextItem()
@@ -77,7 +85,7 @@ function create_quizzes_main(action_flag) {
           
       } else if (type == '‘I‘ð') {
         //if any image, set image item
-        setimage_(form, line, c_image);
+        setimage_(form, line, c_image, sheet_folder_id);
 
         //create a multiplechoice quiz
         var choicevalues = line.slice(c_item, c_item + numbers_of_last_items + 1);
@@ -176,19 +184,63 @@ function isNaN_ (value) {
   return typeof value === 'number' && value !== value
 }
 
-function setimage_ (form, line, c_image) {
+function setimage_ (form, line, c_image, sheet_folder_id) {
       //set a image to this quiz
       var imagelocation = line[c_image];
+      var img = '';
       if (imagelocation !== '') {
         if (imagelocation.slice(0,4) !== 'http'){
-          //imagelocation = 'https://drive.google.com/open?id='+line[3];
-          var img = DriveApp.getFileById(imagelocation);
-          var img = img.getBlob();
-        }else{
+          //image by ID
+          if (imagelocation.length > 32) {
+            img = DriveApp.getFileById(imagelocation).getBlob();
+          } else {
+          //image by file name
+            var key = sheet_folder_id;
+            var folders = DriveApp.searchFolders("'"+key+"' in parents");
+            img = check_file_(folders, key, imagelocation);
+            if ( img == '' ) {
+              while (folders.hasNext()) {
+                 key = folders.next().getId()
+                 img = check_file_(folders, key, imagelocation);    
+                 if ( img != '' ) {
+                   break;
+                 }
+              } 
+            }
+          }
+        } else {
+          //image by google drive URL
+          if (imagelocation.slice(0,29) == 'https://drive.google.com/file'){
+          var s_start = imagelocation.indexOf('/d/');
+          var image_id = imagelocation.slice(s_start+3, imagelocation.length); 
+          var s_end = image_id.indexOf('/');
+          if (s_end != -1) {
+            image_id = image_id.slice(0,s_end);
+          }
+          img = DriveApp.getFileById(image_id).getBlob();
+          } else {
+          //image by world wide web
           var img = UrlFetchApp.fetch(imagelocation);
+          }
         }
-        form.addImageItem().setImage(img).setAlignment(FormApp.Alignment.CENTER);
+        if ( img != '' ) {
+          form.addImageItem().setImage(img).setAlignment(FormApp.Alignment.CENTER);
+        } 
+
       }
+}
+
+function check_file_(folders, key, imagelocation) {
+              var img = '';
+              //var fileList = DriveApp.getFolderById(sheet_folder_id).getFiles();
+              var fileList = DriveApp.searchFiles("'"+key+"' in parents");
+              while (fileList.hasNext()) {
+                var check_file = fileList.next();
+                if (check_file.getName() === imagelocation) {
+                  img = DriveApp.getFileById(check_file.getId()).getBlob();
+                }
+              } 
+              return img
 }
 
 function setpoint_ (item, line, quiz_flag, c_points) {
