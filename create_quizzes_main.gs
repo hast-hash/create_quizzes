@@ -4,6 +4,9 @@ function create_quizzes_main(action_flag) {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = spreadsheet.getActiveSheet();
   const ss = sheet.getDataRange().getValues();
+  const sheet_id = spreadsheet.getId();
+  const sheet_folder = DriveApp.getFileById(sheet_id).getParents().next();
+  const sheet_folder_id = sheet_folder.getId();
 
   //set form title and questions about test-taker's IDs
   //cf. locations are fixed.
@@ -34,14 +37,11 @@ function create_quizzes_main(action_flag) {
     //test-taker's IDs
     form.addTextItem().setTitle(test_taker_ID_title).setHelpText(test_taker_ID_description).setRequired(true);
     form.addTextItem().setTitle(test_taker_name_title).setHelpText(test_taker_name_description).setRequired(true);
-  }
-
+ 
   //moveFile to users' folder where the spreadsheet is in
-  const sheet_id = spreadsheet.getId();
-  const sheet_folder = DriveApp.getFileById(sheet_id).getParents().next();
-  const sheet_folder_id = sheet_folder.getId();
-  const form_file = DriveApp.getFileById(form.getId());
-  form_file.moveTo(sheet_folder);
+    const form_file = DriveApp.getFileById(form.getId());
+    form_file.moveTo(sheet_folder);
+ }
 
   //how many times you create quizzes
   var numbers_of_quizzes = 1;
